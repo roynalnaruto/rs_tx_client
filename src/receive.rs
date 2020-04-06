@@ -4,14 +4,17 @@ use std::str::FromStr;
 use parity_crypto::Keccak256;
 use parity_crypto::publickey::ec_math_utils;
 use parity_crypto::publickey::{KeyPair, Secret};
-use web3::types::{Address, U256};
+
+use web3::futures::Future;
+use web3::types::{H160, U256};
 
 use crate::errors::Error;
 use crate::key;
+use crate::utils::convert_h160;
 
 pub struct Receipt {
-    address: Address,
-    balance: U256,
+    pub address: H160,
+    pub balance: U256,
 }
 
 pub fn receive(
@@ -19,6 +22,10 @@ pub fn receive(
     master_address: &str,
     nonce_point_str: &str
 ) -> Result<Receipt, Error> {
+    // instantiate web3
+    let (_eloop, transport) = web3::transports::Http::new("http://127.0.0.1:8545").unwrap();
+    let web3 = web3::Web3::new(transport);
+
     // load master keypair
     let mut keys_path = master_path.clone();
     let master_keypair = key::load(&mut master_path, &master_address)?;
@@ -39,7 +46,12 @@ pub fn receive(
     key::store(&mut keys_path, &recipient_keypair)?;
 
     // query balance and form receipt
-    todo!();
+    let address = convert_h160(recipient_keypair.address());
+    let balance = web3.eth().balance(address, None).wait().unwrap();
+    let receipt = Receipt {
+        address: address,
+        balance: balance
+    };
 
-    Err(Error::Custom(String::from("[receive] dummy error")))
+    Ok(receipt)
 }

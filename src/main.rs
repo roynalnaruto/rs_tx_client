@@ -10,6 +10,7 @@ mod key;
 mod transfer;
 mod receive;
 mod errors;
+mod utils;
 
 /// RsTx client for Stealth Addresses in Ethereum
 #[derive(StructOpt, Debug)]
@@ -45,7 +46,11 @@ enum Cli {
         /// Recipient public key
         /// in compressed form
         #[structopt(short = "t")]
-        to: String
+        to: String,
+        /// Value to be transferred
+        /// (in wei)
+        #[structopt(short = "v")]
+        value: String
     },
     /// Receive ether
     #[structopt(name = "receive")]
@@ -82,13 +87,29 @@ fn main() {
             }
         },
         Cli::List { storage_dir } => println!("Handle List {:?}", storage_dir),
-        Cli::Transfer { mut storage_dir, from, to } => {
-            println!("Handle Transfer [dir] = {:?}, [from] = {}, [to] = {}", storage_dir, from, to);
-            transfer::transfer(&mut storage_dir, &from, &to);
+        Cli::Transfer { mut storage_dir, from, to, value } => {
+            println!("Handle Transfer [dir] = {:?}, [from] = {}, [to] = {}, value = {}", storage_dir, from, to, value);
+            match transfer::transfer(&mut storage_dir, &from, &to, &value) {
+                Ok(transferReceipt) => {
+                    println!("Successfully transferred");
+                    println!("Tx hash: {:?}", transferReceipt.tx_hash);
+                    println!("Share this nonce point with recipient: {:x}", transferReceipt.nonce_point_compressed);
+                    println!("nonce point (x) = {:?}", transferReceipt.nonce_point_x);
+                    println!("nonce point (y) = {:?}", transferReceipt.nonce_point_y);
+                },
+                Err(error) => panic!("[Error in transfer]: {:?}", error)
+            }
         },
         Cli::Receive { mut storage_dir, address, nonce_point } => {
             println!("Handle receive [dir] = {:?}, [master] = {}, [nonce point] = {}", storage_dir, address, nonce_point);
-            receive::receive(&mut storage_dir, &address, &nonce_point);
+            match receive::receive(&mut storage_dir, &address, &nonce_point) {
+                Ok(receipt) => {
+                    println!("Successfully claimed receipt");
+                    println!("Recipient address: {:?}", receipt.address);
+                    println!("Recipient balance: {:?}", receipt.balance);
+                },
+                Err(error) => panic!("[Error in receiving]: {:?}", error)
+            }
         },
         Cli::Scan { block } => {
             if let Some(b) = block {

@@ -6,9 +6,10 @@ authors = ["Rohit Narurkar <rohitnarurkar@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-ethereum-tx-sign = "0.0.2"
+ethereum-tx-sign = "3.0.2"
 hex = "0.4.2"
 parity-crypto = {version = "0.6.0", features = ["publickey"]}
+primitive-types = "0.7.0"
 secp256k1 = "0.17.2"
 structopt = "0.2.10"
 web3 = { git = "https://github.com/tomusdrw/rust-web3" }

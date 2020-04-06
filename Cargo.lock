@@ -291,12 +291,6 @@ dependencies = [
 
 [[package]]
 name = "crunchy"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a2f4a431c5c9f662e1200b7c7f02c34e91361150e382089a8f2dec3ba680cbda"
-
-[[package]]
-name = "crunchy"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7a81dae078cea95a014a339291cec439d2f232ebe854a9d672b796c6afafa9b7"
@@ -348,15 +342,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bb1f6b1ce1c140482ea30ddd3335fc0024ac7ee112895426e0a629a6c20adfe3"
 
 [[package]]
-name = "elastic-array"
-version = "0.10.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "580f3768bd6465780d063f5b8213a2ebd506e139b345e4a81eb301ceae3d61e1"
-dependencies = [
- "heapsize",
-]
-
-[[package]]
 name = "ethabi"
 version = "11.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -367,20 +352,7 @@ dependencies = [
  "serde",
  "serde_json",
  "tiny-keccak 1.5.0",
- "uint 0.8.2",
-]
-
-[[package]]
-name = "ethbloom"
-version = "0.5.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a6294da962646baa738414e8e718d1a1f0360a51d92de89ccbf91870418f5360"
-dependencies = [
- "crunchy 0.1.6",
- "ethereum-types-serialize",
- "fixed-hash 0.2.5",
- "serde",
- "tiny-keccak 1.5.0",
+ "uint",
 ]
 
 [[package]]
@@ -389,7 +361,7 @@ version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32cfe1c169414b709cf28aa30c74060bdb830a03a8ba473314d079ac79d80a5f"
 dependencies = [
- "crunchy 0.2.2",
+ "crunchy",
  "fixed-hash 0.5.2",
  "impl-rlp",
  "impl-serde 0.2.3",
@@ -402,7 +374,7 @@ version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9e7abcddbdd5db30aeed4deb586adc4824e6c247e2f7238d1187f752893f096b"
 dependencies = [
- "crunchy 0.2.2",
+ "crunchy",
  "fixed-hash 0.6.0",
  "impl-rlp",
  "impl-serde 0.3.0",
@@ -411,31 +383,18 @@ dependencies = [
 
 [[package]]
 name = "ethereum-tx-sign"
-version = "0.0.2"
+version = "3.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e52cd032ced69abdef1113b2862b4d12feddd87f86c6c5d9f711a1ec25cab94f"
+checksum = "1d65552d3f9f24d3085823d47bb6cdee8a42a53b2ce8f262d69c1780262dd121"
 dependencies = [
- "ethereum-types 0.4.2",
- "rlp 0.2.4",
- "secp256k1 0.11.5",
+ "ethereum-types 0.8.0",
+ "num-traits",
+ "rlp",
+ "secp256k1",
  "serde",
  "serde_derive",
  "serde_json",
- "tiny-keccak 1.5.0",
-]
-
-[[package]]
-name = "ethereum-types"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e742184dc63a01c8ea0637369f8faa27c40f537949908a237f95c05e68d2c96"
-dependencies = [
- "crunchy 0.1.6",
- "ethbloom 0.5.3",
- "ethereum-types-serialize",
- "fixed-hash 0.2.5",
- "serde",
- "uint 0.4.1",
+ "tiny-keccak 2.0.2",
 ]
 
 [[package]]
@@ -449,7 +408,7 @@ dependencies = [
  "impl-rlp",
  "impl-serde 0.2.3",
  "primitive-types 0.6.2",
- "uint 0.8.2",
+ "uint",
 ]
 
 [[package]]
@@ -463,16 +422,7 @@ dependencies = [
  "impl-rlp",
  "impl-serde 0.3.0",
  "primitive-types 0.7.0",
- "uint 0.8.2",
-]
-
-[[package]]
-name = "ethereum-types-serialize"
-version = "0.2.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1873d77b32bc1891a79dad925f2acbc318ee942b38b9110f9dbc5fbeffcea350"
-dependencies = [
- "serde",
+ "uint",
 ]
 
 [[package]]
@@ -480,17 +430,6 @@ name = "fake-simd"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e88a8acf291dafb59c2d96e8f59828f3838bb1a70398823ade51a84de6a6deed"
-
-[[package]]
-name = "fixed-hash"
-version = "0.2.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7afe6ce860afb14422711595a7b26ada9ed7de2f43c0b2ab79d09ee196287273"
-dependencies = [
- "heapsize",
- "rand 0.4.6",
- "rustc-hex",
-]
 
 [[package]]
 name = "fixed-hash"
@@ -611,15 +550,6 @@ dependencies = [
  "slab 0.4.2",
  "string",
  "tokio-io",
-]
-
-[[package]]
-name = "heapsize"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1679e6ea370dee694f91f1dc469bf94cf8f52051d147aec3e1f9497c6fc22461"
-dependencies = [
- "winapi 0.3.8",
 ]
 
 [[package]]
@@ -784,7 +714,7 @@ version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f7a72f11830b52333f36e3b09a288333888bf54380fd0ac0790a3c31ab0f3c5"
 dependencies = [
- "rlp 0.4.5",
+ "rlp",
 ]
 
 [[package]]
@@ -999,6 +929,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "num-traits"
+version = "0.2.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c62be47e61d1842b9170f0fdeec8eba98e60e90e5446449a0545e5152acd7096"
+dependencies = [
+ "autocfg 1.0.0",
+]
+
+[[package]]
 name = "num_cpus"
 version = "1.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1065,7 +1004,7 @@ dependencies = [
  "ripemd160",
  "rustc-hex",
  "scrypt",
- "secp256k1 0.17.2",
+ "secp256k1",
  "sha2",
  "subtle 2.2.2",
  "tiny-keccak 2.0.2",
@@ -1183,7 +1122,7 @@ dependencies = [
  "impl-codec",
  "impl-rlp",
  "impl-serde 0.3.0",
- "uint 0.8.2",
+ "uint",
 ]
 
 [[package]]
@@ -1196,7 +1135,7 @@ dependencies = [
  "impl-codec",
  "impl-rlp",
  "impl-serde 0.3.0",
- "uint 0.8.2",
+ "uint",
 ]
 
 [[package]]
@@ -1240,19 +1179,6 @@ name = "radium"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "def50a86306165861203e7f84ecffbbdfdea79f0e51039b33de1e952358c47ac"
-
-[[package]]
-name = "rand"
-version = "0.4.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "552840b97013b1a26992c11eac34bdd778e464601a4c2054b5f0bff7c6761293"
-dependencies = [
- "fuchsia-cprng",
- "libc",
- "rand_core 0.3.1",
- "rdrand",
- "winapi 0.3.8",
-]
 
 [[package]]
 name = "rand"
@@ -1451,18 +1377,6 @@ dependencies = [
 
 [[package]]
 name = "rlp"
-version = "0.2.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "524c5ad554859785dfc8469df3ed5e0b5784d4d335877ed47c8d90fc0eb238fe"
-dependencies = [
- "byteorder",
- "elastic-array",
- "ethereum-types 0.4.2",
- "rustc-hex",
-]
-
-[[package]]
-name = "rlp"
 version = "0.4.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4a7d3f9bed94764eac15b8f14af59fac420c236adaff743b7bcc88e265cb4345"
@@ -1477,7 +1391,8 @@ dependencies = [
  "ethereum-tx-sign",
  "hex",
  "parity-crypto",
- "secp256k1 0.17.2",
+ "primitive-types 0.7.0",
+ "secp256k1",
  "structopt",
  "web3",
 ]
@@ -1542,16 +1457,6 @@ dependencies = [
  "hmac",
  "pbkdf2",
  "sha2",
-]
-
-[[package]]
-name = "secp256k1"
-version = "0.11.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e22659b295bc209921ddd4e5379ceaf194fcfd19eb515051b7ba30ce47d8063a"
-dependencies = [
- "cc",
- "libc",
 ]
 
 [[package]]
@@ -1813,7 +1718,7 @@ version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1d8a021c69bb74a44ccedb824a046447e2c84a01df9e5c20779750acb38e11b2"
 dependencies = [
- "crunchy 0.2.2",
+ "crunchy",
 ]
 
 [[package]]
@@ -1822,7 +1727,7 @@ version = "2.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2c9d3793400a45f954c52e73d068316d76b6f4e36977e3fcebb13a2721e80237"
 dependencies = [
- "crunchy 0.2.2",
+ "crunchy",
 ]
 
 [[package]]
@@ -2101,24 +2006,12 @@ checksum = "6d2783fe2d6b8c1101136184eb41be8b1ad379e4657050b8aaff0c79ee7575f9"
 
 [[package]]
 name = "uint"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "754ba11732b9161b94c41798e5197e5e75388d012f760c42adb5000353e98646"
-dependencies = [
- "byteorder",
- "crunchy 0.1.6",
- "heapsize",
- "rustc-hex",
-]
-
-[[package]]
-name = "uint"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e75a4cdd7b87b28840dba13c483b9a88ee6bbf16ba5c951ee1ecfcf723078e0d"
 dependencies = [
  "byteorder",
- "crunchy 0.2.2",
+ "crunchy",
  "rustc-hex",
  "static_assertions",
 ]
@@ -2248,9 +2141,9 @@ dependencies = [
  "log 0.4.8",
  "native-tls",
  "parking_lot 0.10.0",
- "rlp 0.4.5",
+ "rlp",
  "rustc-hex",
- "secp256k1 0.17.2",
+ "secp256k1",
  "serde",
  "serde_json",
  "tiny-keccak 2.0.2",
