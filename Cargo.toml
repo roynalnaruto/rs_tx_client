@@ -1,0 +1,14 @@
+[package]
+name = "rs_tx_client"
+description = "Rust client to support Stealth Addresses for Ethereum"
+version = "0.1.0"
+authors = ["Rohit Narurkar <rohitnarurkar@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+ethereum-tx-sign = "0.0.2"
+hex = "0.4.2"
+parity-crypto = {version = "0.6.0", features = ["publickey"]}
+secp256k1 = "0.17.2"
+structopt = "0.2.10"
+web3 = { git = "https://github.com/tomusdrw/rust-web3" }
