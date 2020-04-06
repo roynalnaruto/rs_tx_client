@@ -6,8 +6,10 @@ authors = ["Rohit Narurkar <rohitnarurkar@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+daemonize = "0.4.1"
 ethereum-tx-sign = "3.0.2"
 hex = "0.4.2"
+job_scheduler = "1.2.1"
 parity-crypto = {version = "0.6.0", features = ["publickey"]}
 primitive-types = "0.7.0"
 secp256k1 = "0.17.2"

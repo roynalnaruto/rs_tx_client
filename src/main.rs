@@ -1,15 +1,18 @@
 use std::path::PathBuf;
 use structopt::StructOpt;
 
+extern crate daemonize;
 extern crate hex;
+extern crate job_scheduler;
 extern crate parity_crypto;
 extern crate secp256k1;
 extern crate web3;
 
-mod key;
-mod transfer;
-mod receive;
 mod errors;
+mod key;
+mod receive;
+mod scan;
+mod transfer;
 mod utils;
 
 /// RsTx client for Stealth Addresses in Ethereum
@@ -71,10 +74,17 @@ enum Cli {
     /// for incoming txs
     #[structopt(name = "scan")]
     Scan {
+        /// Directory in which master
+        /// keypair file is saved
+        #[structopt(short = "s", parse(from_os_str))]
+        storage_dir: PathBuf,
+        /// Master key address
+        #[structopt(short = "a")]
+        address: String,
         /// Block number to
         /// scan from
         #[structopt(short = "b")]
-        block: Option<i32>
+        block: Option<u64>
     }
 }
 
@@ -92,7 +102,8 @@ fn main() {
             match transfer::transfer(&mut storage_dir, &from, &to, &value) {
                 Ok(transferReceipt) => {
                     println!("Successfully transferred");
-                    println!("Tx hash: {:?}", transferReceipt.tx_hash);
+                    println!("Transfer tx hash: {:?}", transferReceipt.tx1_hash);
+                    println!("Nonce broadcasted tx hash: {:?}", transferReceipt.tx2_hash);
                     println!("Share this nonce point with recipient: {:x}", transferReceipt.nonce_point_compressed);
                     println!("nonce point (x) = {:?}", transferReceipt.nonce_point_x);
                     println!("nonce point (y) = {:?}", transferReceipt.nonce_point_y);
@@ -111,12 +122,9 @@ fn main() {
                 Err(error) => panic!("[Error in receiving]: {:?}", error)
             }
         },
-        Cli::Scan { block } => {
-            if let Some(b) = block {
-                println!("Handle Scan from block {:?}", b);
-            } else {
-                println!("Handle Scan from last block");
-            }
+        Cli::Scan { mut storage_dir, address, block } => {
+            println!("Handle Scan");
+            scan::scan(&mut storage_dir, &address, block);
         }
     }
 }

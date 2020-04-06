@@ -5,6 +5,7 @@ pub enum Error {
     Secp(secp256k1::Error),
     ParityCrypto(parity_crypto::publickey::Error),
     Io(std::io::Error),
+    Daemonize(daemonize::DaemonizeError),
     Custom(String),
 }
 
@@ -31,5 +32,11 @@ impl From<parity_crypto::publickey::Error> for Error {
 impl From<std::io::Error> for Error {
     fn from(e: std::io::Error) -> Error {
         Error::Io(e)
+    }
+}
+
+impl From<daemonize::DaemonizeError> for Error {
+    fn from(e: daemonize::DaemonizeError) -> Error {
+        Error::Daemonize(e)
     }
 }

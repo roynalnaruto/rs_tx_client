@@ -4,14 +4,16 @@ use std::str::FromStr;
 use parity_crypto::Keccak256;
 use parity_crypto::publickey::ec_math_utils;
 use parity_crypto::publickey::public_to_address;
-use parity_crypto::publickey::{Generator, Random, Secret};
+use parity_crypto::publickey::{Generator, Random, Public, Secret};
 
 use secp256k1::PublicKey;
 
 use ethereum_tx_sign::RawTransaction;
 
+use web3::Web3;
 use web3::futures::Future;
-use web3::types::{Bytes, H160, H256, U256};
+use web3::transports::Http;
+use web3::types::{Bytes, H256, U256};
 
 use crate::errors::Error;
 use crate::key;
@@ -21,7 +23,29 @@ pub struct Transfer {
     pub nonce_point_x: U256,
     pub nonce_point_y: U256,
     pub nonce_point_compressed: PublicKey,
-    pub tx_hash: H256,
+    pub tx1_hash: H256,
+    pub tx2_hash: H256,
+}
+
+impl Default for Transfer {
+    fn default() -> Transfer {
+        let public_key = Public::default();
+        let secp_public_key = key::to_secp256k1_public(&public_key).ok().unwrap();
+
+        Transfer {
+            nonce_point_x: U256::default(),
+            nonce_point_y: U256::default(),
+            nonce_point_compressed: secp_public_key,
+            tx1_hash: H256::default(),
+            tx2_hash: H256::default()
+        }
+    }
+}
+
+impl Transfer {
+    fn set_tx2_hash(&mut self, tx2_hash: H256) {
+        self.tx2_hash = tx2_hash
+    }
 }
 
 pub fn transfer(
@@ -75,20 +99,34 @@ pub fn transfer(
         };
         let chain_id = web3.eth().chain_id().wait().unwrap().as_u64();
         let signed_tx = tx.sign(&convert_h256(sender_keypair.secret()), &chain_id);
-        let tx_hash = web3.eth().send_raw_transaction(Bytes::from(signed_tx)).wait().unwrap();
+        let tx1_hash = web3.eth().send_raw_transaction(Bytes::from(signed_tx)).wait().unwrap();
 
         let (nonce_point_x, nonce_point_y) = decompose_public_key(&nonce_point_compressed);
-        let transfer = Transfer {
+        let mut transfer = Transfer {
             nonce_point_x: U256::from(nonce_point_x),
             nonce_point_y: U256::from(nonce_point_y),
             nonce_point_compressed: nonce_point_compressed,
-            tx_hash: tx_hash
+            tx1_hash: tx1_hash,
+            ..Default::default()
         };
+
+        // broadcast the nonce to RsTx smart contract
+        let tx2_hash = broadcast_nonce(&web3, &nonce_point_x, &nonce_point_y, &ecdh_shared_secret_hash)?;
+        transfer.set_tx2_hash(tx2_hash);
 
         Ok(transfer)
     } else {
         Err(Error::Custom(String::from("[value] could not be parsed")))
     }
+}
+
+pub fn broadcast_nonce(
+    web3: &Web3<Http>,
+    nonce_point_x: &[u8; 32],
+    nonce_point_y: &[u8; 32],
+    shared_secret: &[u8; 32]
+) -> Result<H256, Error> {
+    unimplemented!()
 }
 
 fn decompose_public_key(public_key: &PublicKey) -> ([u8; 32], [u8; 32]) {
