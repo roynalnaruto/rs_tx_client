@@ -83,11 +83,11 @@ fn main() {
         },
         Cli::List { storage_dir } => println!("Handle List {:?}", storage_dir),
         Cli::Transfer { mut storage_dir, from, to } => {
-            println!("Handle Transfer [dir] = {:?}, [from] = {:?}, [to] = {:?}", storage_dir, from, to);
+            println!("Handle Transfer [dir] = {:?}, [from] = {}, [to] = {}", storage_dir, from, to);
             transfer::transfer(&mut storage_dir, &from, &to);
         },
         Cli::Receive { mut storage_dir, address, nonce_point } => {
-            println!("Handle receive [dir] = {:?}, [master] = {:?}, [nonce point] = {:?}", storage_dir, address, nonce_point);
+            println!("Handle receive [dir] = {:?}, [master] = {}, [nonce point] = {}", storage_dir, address, nonce_point);
             receive::receive(&mut storage_dir, &address, &nonce_point);
         },
         Cli::Scan { block } => {

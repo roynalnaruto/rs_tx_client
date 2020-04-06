@@ -41,7 +41,7 @@ pub fn store(path: &mut PathBuf, keypair: &KeyPair) -> Result<(), Error> {
 
 pub fn load(path: &mut PathBuf, address: &str) -> Result<KeyPair, Error> {
     // get filepath of stored keypair
-    let filename = format!("{:?}.json", address);
+    let filename = format!("{}.json", address);
     path.push(filename);
 
     // open file and read the first line (secret key)

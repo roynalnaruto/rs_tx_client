@@ -20,6 +20,7 @@ pub fn receive(
     nonce_point_str: &str
 ) -> Result<Receipt, Error> {
     // load master keypair
+    let mut keys_path = master_path.clone();
     let master_keypair = key::load(&mut master_path, &master_address)?;
     let master_secret_key = master_keypair.secret().clone();
 
@@ -35,7 +36,7 @@ pub fn receive(
     let recipient_keypair = KeyPair::from_secret(recipient_secret_key)?;
 
     // store this key along with the master key
-    key::store(&mut master_path, &recipient_keypair)?;
+    key::store(&mut keys_path, &recipient_keypair)?;
 
     // query balance and form receipt
     todo!();
