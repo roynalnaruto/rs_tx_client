@@ -107,15 +107,13 @@ fn main() {
                     println!("Successfully transferred");
                     println!("Transfer tx hash: {:?}", transfer_receipt.tx1_hash);
                     println!("Nonce broadcasted tx hash: {:?}", transfer_receipt.tx2_hash);
-                    println!("Share this nonce point with recipient: {:x}", transfer_receipt.nonce_point_compressed);
-                    println!("nonce point (x) = {:?}", transfer_receipt.nonce_point_x);
-                    println!("nonce point (y) = {:?}", transfer_receipt.nonce_point_y);
+                    println!("Share this nonce point with recipient: {}", transfer_receipt.nonce_point);
                 },
                 Err(error) => panic!("[Error in transfer]: {:?}", error)
             }
         },
         Cli::Receive { mut storage_dir, address, nonce_point } => {
-            println!("Handle receive [dir] = {:?}, [master] = {}, [nonce point] = {}", storage_dir, address, nonce_point);
+            println!("Handle receive [dir] = {:?}, [master] = {}, [nonce point] = {:?}", storage_dir, address, nonce_point);
             match receive::receive(&mut storage_dir, &address, &nonce_point) {
                 Ok(receipt) => {
                     println!("Successfully claimed receipt");
