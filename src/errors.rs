@@ -6,6 +6,10 @@ pub enum Error {
     ParityCrypto(parity_crypto::publickey::Error),
     Io(std::io::Error),
     Daemonize(daemonize::DaemonizeError),
+    Ethabi(ethabi::Error),
+    HexEncDecError(hex::FromHexError),
+    Aead(aead::Error),
+    UintParsing(uint::FromDecStrErr),
     Custom(String),
 }
 
@@ -38,5 +42,29 @@ impl From<std::io::Error> for Error {
 impl From<daemonize::DaemonizeError> for Error {
     fn from(e: daemonize::DaemonizeError) -> Error {
         Error::Daemonize(e)
+    }
+}
+
+impl From<ethabi::Error> for Error {
+    fn from(e: ethabi::Error) -> Error {
+        Error::Ethabi(e)
+    }
+}
+
+impl From<hex::FromHexError> for Error {
+    fn from(e: hex::FromHexError) -> Error {
+        Error::HexEncDecError(e)
+    }
+}
+
+impl From<aead::Error> for Error {
+    fn from(e: aead::Error) -> Error {
+        Error::Aead(e)
+    }
+}
+
+impl From<uint::FromDecStrErr> for Error {
+    fn from(e: uint::FromDecStrErr) -> Error {
+        Error::UintParsing(e)
     }
 }

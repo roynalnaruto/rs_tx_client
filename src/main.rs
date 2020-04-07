@@ -1,11 +1,14 @@
 use std::path::PathBuf;
 use structopt::StructOpt;
 
+extern crate aead;
 extern crate daemonize;
+extern crate ethabi;
 extern crate hex;
 extern crate job_scheduler;
 extern crate parity_crypto;
 extern crate secp256k1;
+extern crate uint;
 extern crate web3;
 
 mod errors;
@@ -100,13 +103,13 @@ fn main() {
         Cli::Transfer { mut storage_dir, from, to, value } => {
             println!("Handle Transfer [dir] = {:?}, [from] = {}, [to] = {}, value = {}", storage_dir, from, to, value);
             match transfer::transfer(&mut storage_dir, &from, &to, &value) {
-                Ok(transferReceipt) => {
+                Ok(transfer_receipt) => {
                     println!("Successfully transferred");
-                    println!("Transfer tx hash: {:?}", transferReceipt.tx1_hash);
-                    println!("Nonce broadcasted tx hash: {:?}", transferReceipt.tx2_hash);
-                    println!("Share this nonce point with recipient: {:x}", transferReceipt.nonce_point_compressed);
-                    println!("nonce point (x) = {:?}", transferReceipt.nonce_point_x);
-                    println!("nonce point (y) = {:?}", transferReceipt.nonce_point_y);
+                    println!("Transfer tx hash: {:?}", transfer_receipt.tx1_hash);
+                    println!("Nonce broadcasted tx hash: {:?}", transfer_receipt.tx2_hash);
+                    println!("Share this nonce point with recipient: {:x}", transfer_receipt.nonce_point_compressed);
+                    println!("nonce point (x) = {:?}", transfer_receipt.nonce_point_x);
+                    println!("nonce point (y) = {:?}", transfer_receipt.nonce_point_y);
                 },
                 Err(error) => panic!("[Error in transfer]: {:?}", error)
             }

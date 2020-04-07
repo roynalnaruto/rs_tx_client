@@ -1,0 +1,52 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "noncePointX",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "noncePointY",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "encryptedRecipient",
+        "type": "bytes"
+      }
+    ],
+    "name": "NewRsTx",
+    "type": "event"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "noncePointX",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "noncePointY",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "encryptedRecipient",
+        "type": "bytes"
+      }
+    ],
+    "name": "rsTx",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

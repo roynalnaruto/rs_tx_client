@@ -16,7 +16,7 @@ pub fn new(mut path: &mut PathBuf) -> Result<(), Error> {
     let keypair = Random.generate();
 
     // store keypair
-    store(&mut path, &keypair);
+    store(&mut path, &keypair)?;
 
     Ok(())
 }
