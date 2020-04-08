@@ -1,5 +1,5 @@
 # RsTx
-RsTx is a Rust client to support [Stealth Addresses](https://www.investopedia.com/terms/s/stealth-address-cryptocurrency.asp) for Ethereum
+RsTx supports [Stealth Addresses](https://www.investopedia.com/terms/s/stealth-address-cryptocurrency.asp) for Ethereum
 
 # Features
 * Create a new master key-pair
@@ -7,13 +7,20 @@ RsTx is a Rust client to support [Stealth Addresses](https://www.investopedia.co
 * Receive funds sent to a master public key
 
 # Concept
+The RsTx architecture consists of the following repositories:
+* [Rust Client](https://github.com/roynalnaruto/rs_tx_client) to implement the logic
+* [Smart contracts](https://github.com/roynalnaruto/rs_tx_contracts) to communicate the nonce point
+* [Subgraph](https://github.com/roynalnaruto/rs_tx_subgraph) to query Ethereum blockchain
+
 RsTx implements stealth addresses based on the Diffie-Hellman key agreement protocol. The implementation follows the [mechanism described here](https://en.bitcoin.it/wiki/ECDH_address).
 
 Both sender and recipient must have an already generated key-pair. The recipient's key-pair will act as a base (master) key, used to calculate the new one-time keys.
 
 After a successful transfer, the sender must communicate the `Nonce point` (which is logged after a transfer) to the recipient. The recipient later uses this point to generate the key for the received funds. Without the nonce point, it is not possible to generate the new key.
 
-A UX issue that needs to be addressed is the communication of nonce point. For the most simplistic implementation (as done in this code), we expect the sender to communicate the nonce point to the recipient off-chain. Future developments could be based around the sender also broadcasting this nonce point on-chain (to a smart contract), and the recipient's client scanning blockchain transactions to fetch and try if the generated key contains any funds.
+Once a transfer has been made, the `nonce_point` is broadcasted to the [RsTx Smart Contract](https://github.com/roynalnaruto/rs_tx_contracts) along with a bytes encoded encrypted form of the recipient's address. The `encrypted_recipient` is used by the recipients in their client to catch or ignore the new RsTx transactions.
+
+Senders can simply run the `scan` command, with an additional block number filter to query RsTx transactions. The GraphQL schema is generated using The Graph Protocol, and the subgraphs can be found here in the [RsTx Subgraph](https://github.com/roynalnaruto/rs_tx_subgraph) repository.
 
 # Getting started
 ### Setup
@@ -92,4 +99,9 @@ Successfully claimed receipt
 Recipient address: 0xffa291cdd831b721a7eef53f8b5a15817a2fceff
 Recipient balance: 1000000000000000000
 ----------------------------------
+```
+* Recipient can also simply scan the new transactions by running the `scan` sub-command (this runs as a daemon)
+The `-b` flag specifies which Ethereum block to scan from. If not provided, the client scans from the current block
+```
+./target/debug/rs_tx_client scan -s .keys/ -a 0x20a291cdd831b721a7eef53f8b5a15817a2fced1 -b 100
 ```
