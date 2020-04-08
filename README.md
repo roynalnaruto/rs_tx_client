@@ -5,6 +5,7 @@ RsTx supports [Stealth Addresses](https://www.investopedia.com/terms/s/stealth-a
 * Create a new master key-pair
 * Transfer funds to a master public key
 * Receive funds sent to a master public key
+* Scan the blockchain for new transactions (and receive them)
 
 # Concept
 The RsTx architecture consists of the following repositories:
@@ -52,6 +53,10 @@ ganache-cli -a=20
 * Receive funds
 ```
 ./target/debug/rs_tx_client receive -s ~/path/to/keys/directory -a <eth-address-of-master-key> -n <nonce-point-as-provided-by-sender>
+```
+* Scan Ethereum for new transactions
+```
+./target/debug/rs_tx_client scan -s ~/path/to/keys/directory -a <eth-address-of-master-key> -b <block-number-to-start-scan-from>
 ```
 
 # Example
