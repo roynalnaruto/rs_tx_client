@@ -110,3 +110,6 @@ The `-b` flag specifies which Ethereum block to scan from. If not provided, the 
 ```
 ./target/debug/rs_tx_client scan -s .keys/ -a 0x20a291cdd831b721a7eef53f8b5a15817a2fced1 -b 100
 ```
+
+# License
+[In detail here](https://github.com/roynalnaruto/rs_tx_client/blob/master/LICENSE.md)
