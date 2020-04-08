@@ -4,6 +4,7 @@ use structopt::StructOpt;
 extern crate aead;
 extern crate daemonize;
 extern crate ethabi;
+extern crate graphql_client;
 extern crate hex;
 extern crate job_scheduler;
 extern crate parity_crypto;
@@ -13,6 +14,7 @@ extern crate web3;
 
 mod errors;
 mod key;
+mod query;
 mod receive;
 mod scan;
 mod transfer;

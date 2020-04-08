@@ -15,6 +15,7 @@ use web3::types::U64;
 
 use crate::errors::Error;
 use crate::key;
+use crate::query;
 
 pub fn scan(
     mut storage_dir: &mut PathBuf,
@@ -63,7 +64,7 @@ pub fn scan(
 fn _scan(keypair: &KeyPair, block_number: U64) {
     let mut sched = JobScheduler::new();
     sched.add(Job::new("1/10 * * * * *".parse().unwrap(), || {
-        println!("I get executed every 10 seconds!");
+        query::query();
     }));
     loop {
         sched.tick();

@@ -1,0 +1,15 @@
+schema {
+  query: root
+}
+
+type Transaction {
+  id: String!
+  noncePoint: String!
+  encryptedRecipient: String!
+}
+
+type root {
+  transactions(
+    first: Int!
+  ): [Transaction!]
+}

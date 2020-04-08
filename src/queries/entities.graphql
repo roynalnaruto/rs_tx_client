@@ -1,0 +1,7 @@
+query Transactions($first: Int!) {
+  transactions(first: $first) {
+    id
+    noncePoint
+    encryptedRecipient
+  }
+}
