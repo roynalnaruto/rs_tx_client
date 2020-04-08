@@ -1,6 +1,7 @@
-query Transactions($first: Int!) {
-  transactions(first: $first) {
+query Transactions($block_gt: Int!) {
+  transactions(where:{block_gt:$block_gt}) {
     id
+    block
     noncePoint
     encryptedRecipient
   }

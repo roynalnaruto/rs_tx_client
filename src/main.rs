@@ -95,16 +95,16 @@ enum Cli {
 
 fn main() {
     match Cli::from_args() {
-        Cli::Create { mut storage_dir } => {
+        Cli::Create { storage_dir } => {
             println!("Handle Create {:?}", storage_dir);
-            if let Err(error) = key::new(&mut storage_dir) {
+            if let Err(error) = key::new(&storage_dir) {
                 panic!("[Error in creating/storing keypair]: {:?}", error)
             }
         },
         Cli::List { storage_dir } => println!("Handle List {:?}", storage_dir),
-        Cli::Transfer { mut storage_dir, from, to, value } => {
+        Cli::Transfer { storage_dir, from, to, value } => {
             println!("Handle Transfer [dir] = {:?}, [from] = {}, [to] = {}, value = {}", storage_dir, from, to, value);
-            match transfer::transfer(&mut storage_dir, &from, &to, &value) {
+            match transfer::transfer(&storage_dir, &from, &to, &value) {
                 Ok(transfer_receipt) => {
                     println!("Successfully transferred");
                     println!("Transfer tx hash: {:?}", transfer_receipt.tx1_hash);
@@ -114,9 +114,9 @@ fn main() {
                 Err(error) => panic!("[Error in transfer]: {:?}", error)
             }
         },
-        Cli::Receive { mut storage_dir, address, nonce_point } => {
+        Cli::Receive { storage_dir, address, nonce_point } => {
             println!("Handle receive [dir] = {:?}, [master] = {}, [nonce point] = {:?}", storage_dir, address, nonce_point);
-            match receive::receive(&mut storage_dir, &address, &nonce_point) {
+            match receive::receive(&storage_dir, &address, &nonce_point) {
                 Ok(receipt) => {
                     println!("Successfully claimed receipt");
                     println!("Recipient address: {:?}", receipt.address);
@@ -125,9 +125,11 @@ fn main() {
                 Err(error) => panic!("[Error in receiving]: {:?}", error)
             }
         },
-        Cli::Scan { mut storage_dir, address, block } => {
+        Cli::Scan { storage_dir, address, block } => {
             println!("Handle Scan");
-            scan::scan(&mut storage_dir, &address, block);
+            if let Err(error) = scan::scan(&storage_dir, &address, block) {
+                panic!("[Error in scan]: {:?}", error);
+            }
         }
     }
 }

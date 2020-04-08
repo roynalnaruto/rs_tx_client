@@ -4,12 +4,13 @@ schema {
 
 type Transaction {
   id: String!
+  block: String!
   noncePoint: String!
   encryptedRecipient: String!
 }
 
 type root {
   transactions(
-    first: Int!
+    block_gt: Int!
   ): [Transaction!]
 }

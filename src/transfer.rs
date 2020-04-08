@@ -25,7 +25,7 @@ use crate::errors::Error;
 use crate::key;
 use crate::utils::{convert_h160, convert_h256};
 
-static RS_TX_CONTRACT_ADDRESS: &'static str = "F52deFbC1A0b43395f55F3F23C8F22865a6cBF53";
+static RS_TX_CONTRACT_ADDRESS: &'static str = "a3b67474A27Ba4bb28eE22e5f1C4529c07A45287";
 
 pub struct Transfer {
     pub nonce_point: String,
@@ -34,7 +34,7 @@ pub struct Transfer {
 }
 
 pub fn transfer(
-    mut from_path: &mut PathBuf,
+    from_path: &PathBuf,
     from_address: &str,
     to: &str,
     value: &str
@@ -72,7 +72,7 @@ pub fn transfer(
 
     // form signed transactions for
     // both Transfer and Broadcasting nonce
-    let sender_keypair = key::load(&mut from_path, &from_address)?;
+    let sender_keypair = key::load(&from_path, &from_address)?;
     let transfer_nonce = web3.eth().transaction_count(convert_h160(sender_keypair.address()), None).wait().unwrap();
     let broadcast_nonce = transfer_nonce + 1;
     let transfer_signed_tx = transfer_tx(&web3, &sender_keypair, transfer_nonce, &recipient_address, value)?;
@@ -143,6 +143,7 @@ fn broadcast_tx(
 	};
     let encryption_nonce = GenericArray::from_slice(&popped_tx_nonce);
     let encrypted_recipient = aead.encrypt(encryption_nonce, recipient_address.as_ref())?;
+    println!("encrypted recipient = {:?}", encrypted_recipient);
 
     // get params for transaction
     let nonce_point: Vec<u8> = secp_nonce_point.serialize().iter().cloned().collect();

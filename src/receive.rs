@@ -18,7 +18,7 @@ pub struct Receipt {
 }
 
 pub fn receive(
-    mut master_path: &mut PathBuf,
+    master_path: &PathBuf,
     master_address: &str,
     nonce_point_str: &str
 ) -> Result<Receipt, Error> {
@@ -28,7 +28,8 @@ pub fn receive(
 
     // load master keypair
     let mut keys_path = master_path.clone();
-    let master_keypair = key::load(&mut master_path, &master_address)?;
+    let mut copy_keys_path = master_path.clone();
+    let master_keypair = key::load(&mut copy_keys_path, &master_address)?;
     let master_secret_key = master_keypair.secret().clone();
 
     // calculate the ecdh shared secret

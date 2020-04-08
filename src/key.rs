@@ -11,21 +11,22 @@ use secp256k1::PublicKey;
 
 use crate::errors::Error;
 
-pub fn new(mut path: &mut PathBuf) -> Result<(), Error> {
+pub fn new(path: &PathBuf) -> Result<(), Error> {
     // generate random keypair
     let keypair = Random.generate();
 
     // store keypair
-    store(&mut path, &keypair)?;
+    store(&path, &keypair)?;
 
     Ok(())
 }
 
-pub fn store(path: &mut PathBuf, keypair: &KeyPair) -> Result<(), Error> {
+pub fn store(path: &PathBuf, keypair: &KeyPair) -> Result<(), Error> {
     // create file to write keypair data
+    let mut copy_path = path.clone();
     let filename = format!("{:?}.json", keypair.address());
-    path.push(filename);
-    let mut file = File::create(path)?;
+    copy_path.push(filename);
+    let mut file = File::create(copy_path)?;
     let public_key = keypair.public();
     let secp_public_key = to_secp256k1_public(&public_key).unwrap();
 
@@ -39,13 +40,14 @@ pub fn store(path: &mut PathBuf, keypair: &KeyPair) -> Result<(), Error> {
     Ok(())
 }
 
-pub fn load(path: &mut PathBuf, address: &str) -> Result<KeyPair, Error> {
+pub fn load(path: &PathBuf, address: &str) -> Result<KeyPair, Error> {
     // get filepath of stored keypair
+    let mut copy_path = path.clone();
     let filename = format!("{}.json", address);
-    path.push(filename);
+    copy_path.push(filename);
 
     // open file and read the first line (secret key)
-    let file = File::open(path)?;
+    let file = File::open(copy_path)?;
     let mut buffer = BufReader::new(file);
     let mut secret_key_line = String::new();
     buffer.read_line(&mut secret_key_line).expect("Unable to read line");
